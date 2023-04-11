@@ -1,62 +1,134 @@
 <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Decoder Tool</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-reader/dist/index.min.js"></script>
+</head>
+<body>
+    <h1>QR Code Decoder Tool</h1>
+    <p>Scan the QR code to decode its contents:</p>
+    <div id="qr-reader"></div>
+    <button id="start-btn">Start</button>
+    <button id="stop-btn">Stop</button>
+    <p id="result"></p>
+    <script src="decoder.js"></script>
+</body>
+</html>
+
+<!-- 
 <html>
 <head>
 	<title>QR Code Decoder Tool</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style>
-		body {
-			font-family: Arial, sans-serif;
-			background-color: #f2f2f2;
-		}
-
 		.container {
-			margin: 50px auto;
 			max-width: 600px;
+			margin: 0 auto;
 			padding: 20px;
-			background-color: #fff;
-			box-shadow: 0 0 10px rgba(0,0,0,0.2);
-			border-radius: 5px;
 			text-align: center;
 		}
-
-		#qr-canvas {
-			margin-top: 20px;
-			max-width: 100%;
-			height: auto;
+		#input {
+			width: 100%;
+			margin: 10px 0;
+			padding: 10px;
+			font-size: 16px;
+			border: 2px solid #ccc;
+			border-radius: 4px;
+			resize: none;
+		}
+		#output {
+			width: 100%;
+			margin: 10px 0;
+			padding: 10px;
+			font-size: 16px;
+			border: 2px solid #ccc;
+			border-radius: 4px;
+			resize: none;
+		}
+		#submit {
+			background-color: #4CAF50;
+			color: white;
+			padding: 12px 20px;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 16px;
+		}
+		#submit:hover {
+			background-color: #45a049;
 		}
 	</style>
 </head>
 <body>
-	<div class="container">
-		<h1>QR Code Decoder Tool</h1>
-		<p>Upload an image containing a QR code or use your device's camera to scan the code.</p>
-		<input type="file" accept="image/*" capture="camera" id="qr-reader" style="display:none">
-		<button id="qr-reader-button">Scan QR Code</button>
-		<br><br>
-		<canvas id="qr-canvas"></canvas>
-		<div id="output"></div>
-	</div>
 
-	<script src="https://rawgit.com/dwa012/html5-qrcode/master/html5-qrcode.min.js"></script>
-	<script>
-		var reader = new Html5Qrcode("qr-reader", /* verbose= */ true);
-		var resultContainer = document.getElementById('output');
+<div class="container">
+	<h1>QR Code Decoder Tool</h1>
+	<p>Enter the QR code image URL below and click on the Decode button to get the decoded text:</p>
+	<textarea id="input" placeholder="Enter QR code image URL"></textarea>
+	<button id="submit">Decode</button>
+	<textarea id="output" placeholder="Decoded text will appear here" readonly></textarea>
+</div>
 
-		// Add a listener for the "scan" button
-		document.getElementById("qr-reader-button").addEventListener("click", function() {
-			reader.start(
-				// Start the decoder
-				function onScanSuccess(qrCodeMessage) {
-					reader.stop();
-					resultContainer.innerHTML = `<strong>Result:</strong> ${qrCodeMessage}`;
-				},
-				function onScanError(errorMessage) {
-					console.log(errorMessage);
-				},
-				/* verbose= */ true,
-				/* frequency= */ 500
-			);
-		});
-	</script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-reader/browser.js"></script>
+<script>
+	const input = document.getElementById("input");
+	const output = document.getElementById("output");
+	const submit = document.getElementById("submit");
+
+	submit.addEventListener("click", () => {
+		const qr = new QrCodeReader();
+		const imageUrl = input.value;
+
+		qr.decodeFromImageUrl(imageUrl)
+			.then(result => {
+				output.value = result.text;
+			})
+			.catch(error => {
+				output.value = "Error decoding QR code. Please check the image URL and try again.";
+				console.error(error);
+			});
+	});
+</script>
+
 </body>
-</html>
+</html> -->
+<!-- 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Decoder Tool</title>
+    <script src="https://cdn.jsdelivr.net/npm/@zxing/library@0.18.3"></script>
+</head>
+<body>
+    <h1>QR Code Decoder Tool</h1>
+    <div>
+        <label for="input-text">Input QR Code Text:</label>
+        <input type="text" id="input-text">
+        <button onclick="decodeQRCode()">Decode</button>
+    </div>
+    <div>
+        <h2>Decoded Text:</h2>
+        <p id="decoded-text"></p>
+    </div>
+    <script>
+        function decodeQRCode() {
+            const codeReader = new ZXing.BrowserQRCodeReader();
+            const inputText = document.getElementById("input-text").value;
+            codeReader.decodeFromInputVideoDevice(undefined, "video").then(result => {
+                document.getElementById("decoded-text").textContent = result.text;
+            }).catch(error => {
+                console.error(error);
+                codeReader.decodeFromImageUrl(inputText).then(result => {
+                    document.getElementById("decoded-text").textContent = result.text;
+                }).catch(error => {
+                    console.error(error);
+                    alert("Unable to decode QR code.");
+                });
+            });
+        }
+    </script>
+</body>
+</html> -->
